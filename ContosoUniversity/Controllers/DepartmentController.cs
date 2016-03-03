@@ -25,7 +25,7 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Department/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -33,11 +33,11 @@ namespace ContosoUniversity.Controllers
             }
 
             // Commenting out original code to show how to use a raw SQL query.
-            //Department department = await db.Departments.FindAsync(id);
+            Department department = db.Departments.Find(id);
 
             // Create and execute raw SQL query.
-            string query = "SELECT * FROM Department WHERE DepartmentID = @p0";
-            Department department = await db.Departments.SqlQuery(query, id).SingleOrDefaultAsync();
+            //string query = "SELECT * FROM Department WHERE DepartmentID = @p0";
+            //Department department = await db.Departments.SqlQuery(query, id).SingleOrDefaultAsync();
 
             if (department == null)
             {
@@ -72,13 +72,13 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Department/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = db.Departments.Find(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -92,7 +92,7 @@ namespace ContosoUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
+        public ActionResult Edit(int? id, byte[] rowVersion)
         {
             string[] fieldsToBind = new string[] { "Name", "Budget", "StartDate", "InstructorID", "RowVersion" };
 
@@ -101,7 +101,7 @@ namespace ContosoUniversity.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var departmentToUpdate = await db.Departments.FindAsync(id);
+            var departmentToUpdate = db.Departments.Find(id);
             if (departmentToUpdate == null)
             {
                 Department deletedDepartment = new Department();
@@ -117,7 +117,7 @@ namespace ContosoUniversity.Controllers
                 try
                 {
                     db.Entry(departmentToUpdate).OriginalValues["RowVersion"] = rowVersion;
-                    await db.SaveChangesAsync();
+                    db.SaveChangesAsync();
 
                     return RedirectToAction("Index");
                 }
@@ -166,13 +166,13 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Department/Delete/5
-        public async Task<ActionResult> Delete(int? id, bool? concurrencyError)
+        public ActionResult Delete(int? id, bool? concurrencyError)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = db.Departments.Find(id);
             if (department == null)
             {
                 if (concurrencyError.GetValueOrDefault())
