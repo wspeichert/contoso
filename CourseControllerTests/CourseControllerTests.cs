@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -11,6 +12,7 @@ using ContosoUniversity.Controllers;
 using ContosoUniversity.DAL;
 using ContosoUniversity.Models;
 using FakeItEasy;
+using FakeItEasy.ExtensionSyntax.Full;
 using NUnit.Framework;
 
 namespace CourseControllerTests
@@ -240,5 +242,205 @@ namespace CourseControllerTests
                 Assert.That(model, Is.EqualTo(expectedResult));
             }
         }
+
+        [TestFixture]
+        public class WhenPostingCreateWithInvalidModel
+        {
+            private CourseController sut;
+            private ViewResult result;
+            private IDataContext fakeDb;
+            private Course model;
+            private FakeDbSet<Department> fakeDataSet;
+
+            [SetUp]
+            public void Given()
+            {
+                fakeDataSet = new FakeDbSet<Department>
+                {
+                    new Department {DepartmentID = 1, Name = "Dep1"},
+                    new Department {DepartmentID = 2, Name = "Dep2"}
+                };
+                sut = new CourseController();
+                fakeDb = A.Fake<IDataContext>();
+                A.CallTo(() => fakeDb.Departments)
+                    .Returns(fakeDataSet);
+                sut.DataContext = () => fakeDb;
+                
+                model = new Course();
+                sut.ModelState.AddModelError("Invalid Model",new Exception("Invalid Model"));
+                result = sut.Create(model) as ViewResult;
+            }
+
+            [Test]
+            public void DoesNotAddAnyRecords()
+            {
+                A.CallTo(() => fakeDb.Courses.Add(A<Course>.Ignored))
+                    .MustNotHaveHappened();
+            }
+
+            [Test]
+            public void DoesNotSaveChanges()
+            {
+                A.CallTo(() => fakeDb.SaveChanges())
+                    .MustNotHaveHappened();
+            }
+
+            [Test]
+            public void RePopulatesDepartmentsDropDownList()
+            {
+                //using a custom comparitor class to validate collections of custom objects
+                Assert.That(sut.ViewBag.DepartmentId, 
+                    Is.EquivalentTo(new SelectList(fakeDataSet))
+                        .Using(new SelectListComparer()
+                        ));
+            }
+
+            public class SelectListComparer : IComparer<SelectListItem>
+            {
+                public int Compare(SelectListItem x, SelectListItem y)
+                {
+                    return x.Text == y.Text && x.Value == y.Value ? 1 : 0;
+                }
+            }
+
+            [Test]
+            public void ReturnsCorrectModelAndView()
+            {
+                Assert.That(result.ViewName, Is.EqualTo(string.Empty));
+                Assert.That(result.Model, Is.EqualTo(model));
+            }
+        }
+
+        //testing exceptions
+        [TestFixture]
+        public class WhenPostingCreateAndRetryLimitIsExceeded
+        {
+            private CourseController sut;
+            private IDataContext fakeDb;
+            private ViewResult result;
+            private FakeDbSet<Department> fakeDataSet;
+            private Course model;
+            [SetUp]
+            public void Given()
+            {
+                fakeDataSet = new FakeDbSet<Department>
+                {
+                    new Department {DepartmentID = 1, Name = "Dep1"},
+                    new Department {DepartmentID = 2, Name = "Dep2"}
+                };
+
+                fakeDb = A.Fake<IDataContext>();
+                A.CallTo(() => fakeDb.Courses.Add(A<Course>.Ignored))
+                    .Throws(new RetryLimitExceededException());
+                A.CallTo(() => fakeDb.Departments)
+                    .Returns(fakeDataSet);
+                
+                sut = new CourseController();
+                sut.DataContext = () => fakeDb;
+
+                model = new Course();
+                result = sut.Create(model) as ViewResult;
+            }
+
+            [Test]
+            public void DoesNotAddAnyRecords()
+            {
+                //can't assert that the method isn't called here, bc it is called
+                //but then it throws an exception.  Instead, we test that no items where
+                //successfully added.
+                Assert.That(fakeDb.Courses, Is.Empty);
+            }
+
+            [Test]
+            public void DoesNotSaveChanges()
+            {
+                A.CallTo(() => fakeDb.SaveChanges())
+                    .MustNotHaveHappened();
+            }
+
+            [Test]
+            public void AddsModelStateError()
+            {
+                Assert.That(sut.ModelState.IsValid, Is.False);
+                var errorMsg = sut.ModelState.Values.Single().Errors.Single().ErrorMessage;
+                Assert.That(errorMsg, Is.EqualTo("Unable to save changes. Try again, and if the problem persists, see your system administrator."));
+            }
+
+            [Test]
+            public void RePopulatesDepartmentsDropDownList()
+            {
+                //using a custom comparitor class to validate collections of custom objects
+                Assert.That(sut.ViewBag.DepartmentId,
+                    Is.EquivalentTo(new SelectList(fakeDataSet))
+                        .Using(new WhenPostingCreateWithInvalidModel.SelectListComparer()
+                        ));
+            }
+
+            public class SelectListComparer : IComparer<SelectListItem>
+            {
+                public int Compare(SelectListItem x, SelectListItem y)
+                {
+                    return x.Text == y.Text && x.Value == y.Value ? 1 : 0;
+                }
+            }
+
+            [Test]
+            public void ReturnsCorrectModelAndView()
+            {
+                Assert.That(result.ViewName, Is.EqualTo(string.Empty));
+                Assert.That(result.Model, Is.EqualTo(model));
+            }
+        }
+
+        [TestFixture]
+        public class WhenPostingCreateWithValidModel
+        {
+            private FakeSchoolContext fakeDB;
+            private CourseController sut;
+            private Course model;
+            private RedirectToRouteResult result;
+
+            [SetUp]
+            public void Given()
+            {
+                fakeDB = new FakeSchoolContext
+                {
+                    Departments =
+                    {
+                        new Department {DepartmentID = 1, Name = "Dep1"},
+                        new Department {DepartmentID = 2, Name = "Dep2"}
+                    }
+                };
+
+                model = new Course {CourseID = 1, Title = "Title"};
+                sut = new CourseController();
+                sut.DataContext = () => fakeDB;
+
+                result = sut.Create(model) as RedirectToRouteResult;
+            }
+
+            [Test]
+            public void AddsNewCourse()
+            {
+                var saved = fakeDB.Courses.Single();
+                Assert.That(saved.CourseID, Is.EqualTo(model.CourseID));
+                Assert.That(saved.Title, Is.EqualTo(model.Title));
+            }
+
+            [Test]
+            public void ChangesAreSaved()
+            {
+                Assert.That(fakeDB.SaveChangesWasCalled, Is.True);
+            }
+
+            [Test]
+            public void RedirectsToIndex()
+            {
+                //controller should be null because we are using MVC naming conventions
+                Assert.That(result.RouteValues["controller"], Is.Null);
+                Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
+            }
+        }
     }
 }
+

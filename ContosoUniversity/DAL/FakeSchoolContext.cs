@@ -28,6 +28,7 @@ namespace ContosoUniversity.DAL
         public IDbSet<Person> People { get; set; }
         public int SaveChanges()
         {
+            _SaveChangesWasCalled = true;
             return 1;
         }
 
@@ -37,5 +38,8 @@ namespace ContosoUniversity.DAL
         }
 
         public Database Database { get; }
+
+        private bool _SaveChangesWasCalled;
+        public bool SaveChangesWasCalled => _SaveChangesWasCalled;
     }
 }
