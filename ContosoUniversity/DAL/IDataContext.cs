@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using ContosoUniversity.Models;
+using System.Threading.Tasks;
 
 namespace ContosoUniversity.DAL
 {
@@ -18,8 +19,9 @@ namespace ContosoUniversity.DAL
         IDbSet<Person> People { get; set; }
 
         int SaveChanges();
+        Task SaveChangesAsync();
         void Dispose();
 
         Database Database { get; }
-    }
+     }
 }

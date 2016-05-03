@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using ContosoUniversity.DAL;
 using ContosoUniversity.Models;
@@ -14,12 +13,23 @@ namespace ContosoUniversity.Controllers
 {
     public class CourseController : Controller
     {
-        public  Func<IDataContext> DataContext = () => new SchoolContext();
+        #region DiConstructors
+        //this is contructor injection.  Two constructors give us the ability to inject a fake for the data
+        //context in unit tests, while running the web app will use the actual SchoolContext.
+        private readonly IDataContext db;
+        public CourseController()
+        {
+            this.db = new SchoolContext();
+        }
+        public CourseController(IDataContext db)
+        {
+            this.db = db;
+        }
+        #endregion
 
         // GET: Course
         public ActionResult Index(int? SelectedDepartment)
         {
-            var db = DataContext();
             var departments = db.Departments.OrderBy(q => q.Name).ToList();
             ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", SelectedDepartment);
             int departmentID = SelectedDepartment.GetValueOrDefault();
@@ -35,7 +45,6 @@ namespace ContosoUniversity.Controllers
         // GET: Course/Details/5
         public ActionResult Details(int? id)
         {
-            var db = DataContext();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -59,7 +68,6 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")]Course course)
         {
-            var db = DataContext();
             try
             {
                 if (ModelState.IsValid)
@@ -80,7 +88,6 @@ namespace ContosoUniversity.Controllers
 
         public ActionResult Edit(int? id)
         {
-            var db = DataContext();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -98,7 +105,6 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int? id)
         {
-            var db = DataContext();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -125,7 +131,6 @@ namespace ContosoUniversity.Controllers
 
         private void PopulateDepartmentsDropDownList(object selectedDepartment = null)
         {
-            var db = DataContext();
             var departmentsQuery = from d in db.Departments
                                    orderby d.Name
                                    select d;
@@ -136,7 +141,6 @@ namespace ContosoUniversity.Controllers
         // GET: Course/Delete/5
         public ActionResult Delete(int? id)
         {
-            var db = DataContext();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -154,7 +158,6 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var db = DataContext();
             Course course = db.Courses.Find(id);
             db.Courses.Remove(course);
             db.SaveChanges();
@@ -169,7 +172,6 @@ namespace ContosoUniversity.Controllers
         [HttpPost]
         public ActionResult UpdateCourseCredits(int? multiplier)
         {
-            var db = DataContext();
             if (multiplier != null)
             {
                 ViewBag.RowsAffected = db.Database.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
@@ -179,7 +181,6 @@ namespace ContosoUniversity.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            var db = DataContext();
             if (disposing)
             {
                 db.Dispose();

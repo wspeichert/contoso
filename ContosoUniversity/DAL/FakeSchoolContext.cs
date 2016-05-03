@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using ContosoUniversity.Models;
 
@@ -32,6 +34,12 @@ namespace ContosoUniversity.DAL
             return 1;
         }
 
+        public Task SaveChangesAsync()
+        {
+            _SaveChangesAsyncWasCalled = true;
+            return null;
+        }
+
         public void Dispose()
         {
             //do nothing
@@ -40,6 +48,8 @@ namespace ContosoUniversity.DAL
         public Database Database { get; }
 
         private bool _SaveChangesWasCalled;
+        private bool _SaveChangesAsyncWasCalled;
         public bool SaveChangesWasCalled => _SaveChangesWasCalled;
+        public bool SaveChangesAsyncWasCalled => _SaveChangesAsyncWasCalled;
     }
 }

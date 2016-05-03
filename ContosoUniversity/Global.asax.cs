@@ -7,6 +7,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using ContosoUniversity.DAL;
 using System.Data.Entity.Infrastructure.Interception;
+using Microsoft.Practices.Unity;
 
 namespace ContosoUniversity
 {
@@ -20,6 +21,9 @@ namespace ContosoUniversity
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             DbInterception.Add(new SchoolInterceptorTransientErrors());
             DbInterception.Add(new SchoolInterceptorLogging());
+
+            var container = new UnityContainer();
+            container.RegisterType<IDataContext,SchoolContext>(new InjectionConstructor());
         }
     }
 }

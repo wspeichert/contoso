@@ -15,7 +15,19 @@ namespace ContosoUniversity.Controllers
 {
     public class InstructorController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        #region DiConstructors
+        //this is contructor injection.  Two constructors give us the ability to inject a fake for the data
+        //context in unit tests, while running the web app will use the actual SchoolContext.
+        private readonly IDataContext db;
+        public InstructorController()
+        {
+            this.db = new SchoolContext();
+        }
+        public InstructorController(IDataContext db)
+        {
+            this.db = db;
+        }
+        #endregion
 
         // GET: Instructor
         public ActionResult Index(int? id, int? courseID)
@@ -42,13 +54,8 @@ namespace ContosoUniversity.Controllers
                 //    x => x.CourseID == courseID).Single().Enrollments;
                 // Explicit loading
                 var selectedCourse = viewModel.Courses.Where(x => x.CourseID == courseID).Single();
-                db.Entry(selectedCourse).Collection(x => x.Enrollments).Load();
-                foreach (Enrollment enrollment in selectedCourse.Enrollments)
-                {
-                    db.Entry(enrollment).Reference(x => x.Student).Load();
-                }
 
-                viewModel.Enrollments = selectedCourse.Enrollments;
+                viewModel.Enrollments = selectedCourse.Enrollments.ToList();
             }
 
             return View(viewModel);

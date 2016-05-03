@@ -30,8 +30,6 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                sut = new CourseController();
-
                 dbFake = new FakeSchoolContext
                 {
                     Departments =
@@ -47,7 +45,7 @@ namespace CourseControllerTests
                     }
                 };
 
-                sut.DataContext = () => dbFake;
+                sut = new CourseController(dbFake);
                 result = sut.Index(null) as ViewResult;
             }
 
@@ -76,8 +74,6 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                sut = new CourseController();
-
                 dbFake = new FakeSchoolContext
                 {
                     Departments =
@@ -93,7 +89,7 @@ namespace CourseControllerTests
                     }
                 };
 
-                sut.DataContext = () => dbFake;
+                sut = new CourseController(dbFake);
                 result = sut.Index(1) as ViewResult;
             }
 
@@ -123,8 +119,6 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                sut = new CourseController();
-
                 dbFake = new FakeSchoolContext
                 {
                     Departments =
@@ -140,7 +134,7 @@ namespace CourseControllerTests
                     }
                 };
 
-                sut.DataContext = () => dbFake;
+                sut = new CourseController(dbFake);
                 result = sut.Index(76543) as ViewResult;
             }
 
@@ -169,9 +163,8 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                sut = new CourseController();
                 //I dont actually need a data fake here, as the action quits before it is ever accessed
-                sut.DataContext = () => null;
+                sut = new CourseController(null);
                 result = sut.Details(null) as HttpStatusCodeResult;
             }
 
@@ -192,10 +185,10 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                sut = new CourseController();
-                var fakeDb = A.Fake<SchoolContext>();
-                A.CallTo(() => fakeDb.Courses.Find(A<int>.Ignored)).Returns(null);
-                sut.DataContext = () => fakeDb;
+                var dbFake = A.Fake<IDataContext>();
+                A.CallTo(() => dbFake.Courses.Find(A<int>.Ignored)).Returns(null);
+
+                sut = new CourseController(dbFake);
                 result = sut.Details(1) as HttpNotFoundResult;
             }
 
@@ -212,7 +205,7 @@ namespace CourseControllerTests
         {
             private CourseController sut;
             private ViewResult result;
-            private IDataContext fakeDb;
+            private IDataContext dbFake;
             private Course expectedResult = new Course();
             //here we use a set integer for the course id, and use it explicitly to define the behavior of the fake
             //we dont want to actually test the .Find method, so if we set up the fake to work with only an 
@@ -222,10 +215,10 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                sut = new CourseController();
-                fakeDb = A.Fake<IDataContext>();
-                A.CallTo(() => fakeDb.Courses.Find(courseId)).Returns(expectedResult);
-                sut.DataContext = () => fakeDb;
+                dbFake = A.Fake<IDataContext>();
+                A.CallTo(() => dbFake.Courses.Find(courseId)).Returns(expectedResult);
+
+                sut = new CourseController(dbFake);
                 result = sut.Details(courseId) as ViewResult;
             }
 
@@ -248,7 +241,7 @@ namespace CourseControllerTests
         {
             private CourseController sut;
             private ViewResult result;
-            private IDataContext fakeDb;
+            private IDataContext dbFake;
             private Course model;
             private FakeDbSet<Department> fakeDataSet;
 
@@ -260,12 +253,11 @@ namespace CourseControllerTests
                     new Department {DepartmentID = 1, Name = "Dep1"},
                     new Department {DepartmentID = 2, Name = "Dep2"}
                 };
-                sut = new CourseController();
-                fakeDb = A.Fake<IDataContext>();
-                A.CallTo(() => fakeDb.Departments)
+                dbFake = A.Fake<IDataContext>();
+                A.CallTo(() => dbFake.Departments)
                     .Returns(fakeDataSet);
-                sut.DataContext = () => fakeDb;
-                
+                sut = new CourseController(dbFake);
+
                 model = new Course();
                 sut.ModelState.AddModelError("Invalid Model",new Exception("Invalid Model"));
                 result = sut.Create(model) as ViewResult;
@@ -274,14 +266,14 @@ namespace CourseControllerTests
             [Test]
             public void DoesNotAddAnyRecords()
             {
-                A.CallTo(() => fakeDb.Courses.Add(A<Course>.Ignored))
+                A.CallTo(() => dbFake.Courses.Add(A<Course>.Ignored))
                     .MustNotHaveHappened();
             }
 
             [Test]
             public void DoesNotSaveChanges()
             {
-                A.CallTo(() => fakeDb.SaveChanges())
+                A.CallTo(() => dbFake.SaveChanges())
                     .MustNotHaveHappened();
             }
 
@@ -316,7 +308,7 @@ namespace CourseControllerTests
         public class WhenPostingCreateAndRetryLimitIsExceeded
         {
             private CourseController sut;
-            private IDataContext fakeDb;
+            private IDataContext dbFake;
             private ViewResult result;
             private FakeDbSet<Department> fakeDataSet;
             private Course model;
@@ -329,14 +321,13 @@ namespace CourseControllerTests
                     new Department {DepartmentID = 2, Name = "Dep2"}
                 };
 
-                fakeDb = A.Fake<IDataContext>();
-                A.CallTo(() => fakeDb.Courses.Add(A<Course>.Ignored))
+                dbFake = A.Fake<IDataContext>();
+                A.CallTo(() => dbFake.Courses.Add(A<Course>.Ignored))
                     .Throws(new RetryLimitExceededException());
-                A.CallTo(() => fakeDb.Departments)
+                A.CallTo(() => dbFake.Departments)
                     .Returns(fakeDataSet);
-                
-                sut = new CourseController();
-                sut.DataContext = () => fakeDb;
+
+                sut = new CourseController(dbFake);
 
                 model = new Course();
                 result = sut.Create(model) as ViewResult;
@@ -348,13 +339,13 @@ namespace CourseControllerTests
                 //can't assert that the method isn't called here, bc it is called
                 //but then it throws an exception.  Instead, we test that no items where
                 //successfully added.
-                Assert.That(fakeDb.Courses, Is.Empty);
+                Assert.That(dbFake.Courses, Is.Empty);
             }
 
             [Test]
             public void DoesNotSaveChanges()
             {
-                A.CallTo(() => fakeDb.SaveChanges())
+                A.CallTo(() => dbFake.SaveChanges())
                     .MustNotHaveHappened();
             }
 
@@ -395,7 +386,7 @@ namespace CourseControllerTests
         [TestFixture]
         public class WhenPostingCreateWithValidModel
         {
-            private FakeSchoolContext fakeDB;
+            private FakeSchoolContext dbFake;
             private CourseController sut;
             private Course model;
             private RedirectToRouteResult result;
@@ -403,7 +394,7 @@ namespace CourseControllerTests
             [SetUp]
             public void Given()
             {
-                fakeDB = new FakeSchoolContext
+                dbFake = new FakeSchoolContext
                 {
                     Departments =
                     {
@@ -413,8 +404,7 @@ namespace CourseControllerTests
                 };
 
                 model = new Course {CourseID = 1, Title = "Title"};
-                sut = new CourseController();
-                sut.DataContext = () => fakeDB;
+                sut = new CourseController(dbFake);
 
                 result = sut.Create(model) as RedirectToRouteResult;
             }
@@ -422,7 +412,7 @@ namespace CourseControllerTests
             [Test]
             public void AddsNewCourse()
             {
-                var saved = fakeDB.Courses.Single();
+                var saved = dbFake.Courses.Single();
                 Assert.That(saved.CourseID, Is.EqualTo(model.CourseID));
                 Assert.That(saved.Title, Is.EqualTo(model.Title));
             }
@@ -430,7 +420,7 @@ namespace CourseControllerTests
             [Test]
             public void ChangesAreSaved()
             {
-                Assert.That(fakeDB.SaveChangesWasCalled, Is.True);
+                Assert.That(dbFake.SaveChangesWasCalled, Is.True);
             }
 
             [Test]

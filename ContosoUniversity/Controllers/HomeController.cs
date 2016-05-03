@@ -11,7 +11,19 @@ namespace ContosoUniversity.Controllers
 {
     public class HomeController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        #region DiConstructors
+        //this is contructor injection.  Two constructors give us the ability to inject a fake for the data
+        //context in unit tests, while running the web app will use the actual SchoolContext.
+        private readonly IDataContext db;
+        public HomeController()
+        {
+            this.db = new SchoolContext();
+        }
+        public HomeController(IDataContext db)
+        {
+            this.db = db;
+        }
+        #endregion
 
         public ActionResult Index()
         {

@@ -15,7 +15,20 @@ namespace ContosoUniversity.Controllers
 {
     public class DepartmentController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        //this is contructor injection.  Two constructors give us the ability to inject a fake for the data
+        //context in unit tests, while running the web app will use the actual SchoolContext.
+        #region DiConstructors
+        private readonly IDataContext db;
+        public DepartmentController(IDataContext db)
+        {
+            this.db = db;
+        }
+
+        public DepartmentController()
+        {
+            this.db = new SchoolContext();
+        }
+        #endregion
 
         // GET: Department
         public async Task<ActionResult> Index()
@@ -116,7 +129,8 @@ namespace ContosoUniversity.Controllers
             {
                 try
                 {
-                    db.Entry(departmentToUpdate).OriginalValues["RowVersion"] = rowVersion;
+                    var existingDepartment = db.Departments.Single(x => x.DepartmentID == departmentToUpdate.DepartmentID);
+                    existingDepartment.RowVersion = rowVersion;
                     db.SaveChangesAsync();
 
                     return RedirectToAction("Index");
@@ -202,7 +216,8 @@ namespace ContosoUniversity.Controllers
         {
             try
             {
-                db.Entry(department).State = EntityState.Deleted;
+                var departmentToDelete = db.Departments.SingleOrDefault(x => x.DepartmentID == department.DepartmentID);
+                db.Departments.Remove(departmentToDelete);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

@@ -2,6 +2,7 @@
 using ContosoUniversity.Models;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Threading.Tasks;
 
 namespace ContosoUniversity.DAL
 {
@@ -26,6 +27,11 @@ namespace ContosoUniversity.DAL
                     .ToTable("CourseInstructor"));
 
             modelBuilder.Entity<Department>().MapToStoredProcedures();
+        }
+
+        Task IDataContext.SaveChangesAsync()
+        {
+            return base.SaveChangesAsync();
         }
     }
 }
