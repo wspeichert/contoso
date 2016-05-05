@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using ContosoUniversity.Controllers;
 using ContosoUniversity.DAL;
 using ContosoUniversity.Models;
 using FakeItEasy;
-using FakeItEasy.ExtensionSyntax.Full;
 using NUnit.Framework;
 
 namespace CourseControllerTests
@@ -23,7 +18,6 @@ namespace CourseControllerTests
         public class WhenGettingIndexWithNullParameter
         {
             private CourseController sut;
-            private IQueryable<Department> departments;
             private FakeSchoolContext dbFake;
             private ViewResult result;
 
@@ -67,7 +61,6 @@ namespace CourseControllerTests
         public class WhenGettingIndexWithValidDepartmentIdParameter
         {
             private CourseController sut;
-            private IQueryable<Department> departments;
             private FakeSchoolContext dbFake;
             private ViewResult result;
 
@@ -112,7 +105,6 @@ namespace CourseControllerTests
         public class WhenGettingIndexWithInvalidDepartmentIdParameter
         {
             private CourseController sut;
-            private IQueryable<Department> departments;
             private FakeSchoolContext dbFake;
             private ViewResult result;
 
