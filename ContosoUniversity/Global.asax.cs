@@ -22,8 +22,7 @@ namespace ContosoUniversity
             DbInterception.Add(new SchoolInterceptorTransientErrors());
             DbInterception.Add(new SchoolInterceptorLogging());
 
-            var container = new UnityContainer();
-            container.RegisterType<IDataContext,SchoolContext>(new InjectionConstructor());
+            Bootstrapper.Initialise();
         }
     }
 }
