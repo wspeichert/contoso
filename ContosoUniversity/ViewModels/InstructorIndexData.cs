@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Entities;
+using DataLayer.Data.Entities;
 
 namespace ContosoUniversity.ViewModels
 {

@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="Controllers\CourseControllerTests.cs" />
     <Compile Include="Controllers\StudentControllerTests.cs" />
+    <Compile Include="Infrastructure\Fakes\FakeDBSet.cs" />
+    <Compile Include="Infrastructure\Fakes\FakeSchoolContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

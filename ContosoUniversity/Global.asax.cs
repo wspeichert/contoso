@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using ContosoUniversity.DAL;
 using System.Data.Entity.Infrastructure.Interception;
 using DataLayer;
 

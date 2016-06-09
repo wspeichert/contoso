@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using DataLayer;
-using DataLayer.Entities;
+using DataLayer.Data;
+using DataLayer.Data.Entities;
 using PagedList;
 using System.Data.Entity.Infrastructure;
 

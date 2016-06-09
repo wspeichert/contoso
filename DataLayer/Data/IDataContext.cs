@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
-using DataLayer.Entities;
+using DataLayer.Data.Entities;
 
-namespace DataLayer
+namespace DataLayer.Data
 {
     public interface IDataContext
     {

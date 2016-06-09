@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataLayer.Entities
+namespace DataLayer.Data.Entities
 {
     public class Student : Person
     {

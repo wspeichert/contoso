@@ -1,5 +1,6 @@
 using System.Web.Mvc;
 using DataLayer;
+using DataLayer.Data;
 using Microsoft.Practices.Unity;
 using Unity.Mvc3;
 

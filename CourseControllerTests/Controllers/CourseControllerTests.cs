@@ -5,9 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using ContosoUniversity.Controllers;
-using ContosoUniversity.DAL;
+using CourseControllerTests.Infrastructure.Fakes;
 using DataLayer;
-using DataLayer.Entities;
+using DataLayer.Data;
+using DataLayer.Data.Entities;
 using FakeItEasy;
 using NUnit.Framework;
 
@@ -29,14 +30,14 @@ namespace CourseControllerTests.Controllers
                 {
                     Departments =
                     {
-                        new Department {Name = "TestDept1", DepartmentID = 1},
-                        new Department {Name = "TestDept2", DepartmentID = 2},
-                        new Department {Name = "TestDept3", DepartmentID = 3}
+                        new Department {Name = "TestDept1", DepartmentId = 1},
+                        new Department {Name = "TestDept2", DepartmentId = 2},
+                        new Department {Name = "TestDept3", DepartmentId = 3}
                     },
                     Courses =
                     {
-                        new Course {CourseID = 1, DepartmentID = 1, Title = "Test Course 1"},
-                        new Course {CourseID = 2, Title = "Test Course 2" }
+                        new Course {CourseId = 1, DepartmentId = 1, Title = "Test Course 1"},
+                        new Course {CourseId = 2, Title = "Test Course 2" }
                     }
                 };
 
@@ -72,14 +73,14 @@ namespace CourseControllerTests.Controllers
                 {
                     Departments =
                     {
-                        new Department {Name = "TestDept1", DepartmentID = 1},
-                        new Department {Name = "TestDept2", DepartmentID = 2},
-                        new Department {Name = "TestDept3", DepartmentID = 3}
+                        new Department {Name = "TestDept1", DepartmentId = 1},
+                        new Department {Name = "TestDept2", DepartmentId = 2},
+                        new Department {Name = "TestDept3", DepartmentId = 3}
                     },
                     Courses =
                     {
-                        new Course {CourseID = 1, DepartmentID = 1, Title = "Test Course 1"},
-                        new Course {CourseID = 2, Title = "Test Course 2" }
+                        new Course {CourseId = 1, DepartmentId = 1, Title = "Test Course 1"},
+                        new Course {CourseId = 2, Title = "Test Course 2" }
                     }
                 };
 
@@ -91,7 +92,7 @@ namespace CourseControllerTests.Controllers
             public void ReturnsOnlyCourseOne()
             {
                 var model = result.Model;
-                var expectedCourse = dbFake.Courses.Where(x => x.CourseID == 1);
+                var expectedCourse = dbFake.Courses.Where(x => x.CourseId == 1);
                 Assert.That(model, Is.EquivalentTo(expectedCourse));
             }
 
@@ -116,14 +117,14 @@ namespace CourseControllerTests.Controllers
                 {
                     Departments =
                     {
-                        new Department {Name = "TestDept1", DepartmentID = 1},
-                        new Department {Name = "TestDept2", DepartmentID = 2},
-                        new Department {Name = "TestDept3", DepartmentID = 3}
+                        new Department {Name = "TestDept1", DepartmentId = 1},
+                        new Department {Name = "TestDept2", DepartmentId = 2},
+                        new Department {Name = "TestDept3", DepartmentId = 3}
                     },
                     Courses =
                     {
-                        new Course {CourseID = 1, DepartmentID = 1, Title = "Test Course 1"},
-                        new Course {CourseID = 2, Title = "Test Course 2" }
+                        new Course {CourseId = 1, DepartmentId = 1, Title = "Test Course 1"},
+                        new Course {CourseId = 2, Title = "Test Course 2" }
                     }
                 };
 
@@ -243,8 +244,8 @@ namespace CourseControllerTests.Controllers
             {
                 fakeDataSet = new FakeDbSet<Department>
                 {
-                    new Department {DepartmentID = 1, Name = "Dep1"},
-                    new Department {DepartmentID = 2, Name = "Dep2"}
+                    new Department {DepartmentId = 1, Name = "Dep1"},
+                    new Department {DepartmentId = 2, Name = "Dep2"}
                 };
                 dbFake = A.Fake<IDataContext>();
                 A.CallTo(() => dbFake.Departments)
@@ -310,8 +311,8 @@ namespace CourseControllerTests.Controllers
             {
                 fakeDataSet = new FakeDbSet<Department>
                 {
-                    new Department {DepartmentID = 1, Name = "Dep1"},
-                    new Department {DepartmentID = 2, Name = "Dep2"}
+                    new Department {DepartmentId = 1, Name = "Dep1"},
+                    new Department {DepartmentId = 2, Name = "Dep2"}
                 };
 
                 dbFake = A.Fake<IDataContext>();
@@ -391,12 +392,12 @@ namespace CourseControllerTests.Controllers
                 {
                     Departments =
                     {
-                        new Department {DepartmentID = 1, Name = "Dep1"},
-                        new Department {DepartmentID = 2, Name = "Dep2"}
+                        new Department {DepartmentId = 1, Name = "Dep1"},
+                        new Department {DepartmentId = 2, Name = "Dep2"}
                     }
                 };
 
-                model = new Course {CourseID = 1, Title = "Title"};
+                model = new Course {CourseId = 1, Title = "Title"};
                 sut = new CourseController(dbFake);
 
                 result = sut.Create(model) as RedirectToRouteResult;
@@ -406,7 +407,7 @@ namespace CourseControllerTests.Controllers
             public void AddsNewCourse()
             {
                 var saved = dbFake.Courses.Single();
-                Assert.That(saved.CourseID, Is.EqualTo(model.CourseID));
+                Assert.That(saved.CourseId, Is.EqualTo(model.CourseId));
                 Assert.That(saved.Title, Is.EqualTo(model.Title));
             }
 

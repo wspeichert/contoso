@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 
-namespace ContosoUniversity.DAL
+namespace CourseControllerTests.Infrastructure.Fakes
 {
     public class FakeDbSet<T> : IDbSet<T>
         where T : class

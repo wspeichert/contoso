@@ -3,8 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Data.Entity.Infrastructure;
-using DataLayer;
-using DataLayer.Entities;
+using DataLayer.Data;
+using DataLayer.Data.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -27,8 +27,8 @@ namespace ContosoUniversity.Controllers
             var departmentId = selectedDepartment.GetValueOrDefault();
 
             var courses = db.Courses
-                .Where(c => !selectedDepartment.HasValue || c.DepartmentID == departmentId)
-                .OrderBy(d => d.CourseID)
+                .Where(c => !selectedDepartment.HasValue || c.DepartmentId == departmentId)
+                .OrderBy(d => d.CourseId)
                 .Include(d => d.Department);
 
             return View(courses.ToList());
@@ -74,7 +74,7 @@ namespace ContosoUniversity.Controllers
                 //Log the error (uncomment dex variable name and add a line here to write a log.)
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
@@ -89,7 +89,7 @@ namespace ContosoUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
@@ -117,7 +117,7 @@ namespace ContosoUniversity.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            PopulateDepartmentsDropDownList(courseToUpdate.DepartmentID);
+            PopulateDepartmentsDropDownList(courseToUpdate.DepartmentId);
             return View(courseToUpdate);
         }
 

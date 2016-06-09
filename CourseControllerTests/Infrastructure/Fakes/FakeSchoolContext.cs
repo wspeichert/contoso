@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
-using ContosoUniversity.DAL;
-using DataLayer.Entities;
+using DataLayer.Data;
+using DataLayer.Data.Entities;
 
-namespace DataLayer
+namespace CourseControllerTests.Infrastructure.Fakes
 {
     public class FakeSchoolContext : IDataContext
     {

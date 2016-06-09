@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
 using System.Data.Entity.Infrastructure;
-using DataLayer;
-using DataLayer.Entities;
+using DataLayer.Data;
+using DataLayer.Data.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -73,7 +73,7 @@ namespace ContosoUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorId);
             return View(department);
         }
 
@@ -89,7 +89,7 @@ namespace ContosoUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorId);
             return View(department);
         }
 
@@ -114,7 +114,7 @@ namespace ContosoUniversity.Controllers
                 TryUpdateModel(deletedDepartment, fieldsToBind);
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
-                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", deletedDepartment.InstructorID);
+                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", deletedDepartment.InstructorId);
                 return View(deletedDepartment);
             }
 
@@ -122,7 +122,7 @@ namespace ContosoUniversity.Controllers
             {
                 try
                 {
-                    var existingDepartment = db.Departments.Single(x => x.DepartmentID == departmentToUpdate.DepartmentID);
+                    var existingDepartment = db.Departments.Single(x => x.DepartmentId == departmentToUpdate.DepartmentId);
                     existingDepartment.RowVersion = rowVersion;
                     db.SaveChangesAsync();
 
@@ -151,9 +151,9 @@ namespace ContosoUniversity.Controllers
                         if (databaseValues.StartDate != clientValues.StartDate)
                             ModelState.AddModelError("StartDate", "Current value: "
                                 + String.Format("{0:d}", databaseValues.StartDate));
-                        if (databaseValues.InstructorID != clientValues.InstructorID)
+                        if (databaseValues.InstructorId != clientValues.InstructorId)
                             ModelState.AddModelError("InstructorID", "Current value: "
-                                + db.Instructors.Find(databaseValues.InstructorID).FullName);
+                                + db.Instructors.Find(databaseValues.InstructorId).FullName);
                         ModelState.AddModelError(string.Empty, "The record you attempted to edit "
                             + "was modified by another user after you got the original value. The "
                             + "edit operation was canceled and the current values in the database "
@@ -168,7 +168,7 @@ namespace ContosoUniversity.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", departmentToUpdate.InstructorID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", departmentToUpdate.InstructorId);
             return View(departmentToUpdate);
         }
 
@@ -209,14 +209,14 @@ namespace ContosoUniversity.Controllers
         {
             try
             {
-                var departmentToDelete = db.Departments.SingleOrDefault(x => x.DepartmentID == department.DepartmentID);
+                var departmentToDelete = db.Departments.SingleOrDefault(x => x.DepartmentId == department.DepartmentId);
                 db.Departments.Remove(departmentToDelete);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             catch (DbUpdateConcurrencyException)
             {
-                return RedirectToAction("Delete", new { concurrencyError = true, id = department.DepartmentID });
+                return RedirectToAction("Delete", new { concurrencyError = true, id = department.DepartmentId });
             }
             catch (DataException /* dex */)
             {

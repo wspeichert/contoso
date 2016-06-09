@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using ContosoUniversity.ViewModels;
-using DataLayer;
+using DataLayer.Data;
 
 
 namespace ContosoUniversity.Controllers

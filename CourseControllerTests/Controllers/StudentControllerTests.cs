@@ -1,7 +1,7 @@
 ﻿using ContosoUniversity.Controllers;
-using ContosoUniversity.DAL;
+using CourseControllerTests.Infrastructure.Fakes;
 using DataLayer;
-using DataLayer.Entities;
+using DataLayer.Data.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;

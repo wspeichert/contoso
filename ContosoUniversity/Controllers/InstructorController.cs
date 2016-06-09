@@ -6,8 +6,8 @@ using System.Net;
 using System.Web.Mvc;
 using ContosoUniversity.ViewModels;
 using System.Data.Entity.Infrastructure;
-using DataLayer;
-using DataLayer.Entities;
+using DataLayer.Data;
+using DataLayer.Data.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -36,7 +36,7 @@ namespace ContosoUniversity.Controllers
             if (id != null)
             {
                 ViewBag.InstructorID = id.Value;
-                viewModel.Courses = viewModel.Instructors.Single(i => i.ID == id.Value).Courses;
+                viewModel.Courses = viewModel.Instructors.Single(i => i.Id == id.Value).Courses;
             }
 
             if (courseId == null) return View(viewModel);
@@ -46,7 +46,7 @@ namespace ContosoUniversity.Controllers
             //viewModel.Enrollments = viewModel.Courses.Where(
             //    x => x.CourseID == courseID).Single().Enrollments;
             // Explicit loading
-            var selectedCourse = viewModel.Courses.Single(x => x.CourseID == courseId);
+            var selectedCourse = viewModel.Courses.Single(x => x.CourseId == courseId);
 
             viewModel.Enrollments = selectedCourse.Enrollments.ToList();
 
@@ -109,7 +109,7 @@ namespace ContosoUniversity.Controllers
             }
             var instructor = db.Instructors
                 .Include(i => i.OfficeAssignment)
-                .Include(i => i.Courses).Single(i => i.ID == id);
+                .Include(i => i.Courses).Single(i => i.Id == id);
             PopulateAssignedCourseData(instructor);
             if (instructor == null)
             {
@@ -121,10 +121,10 @@ namespace ContosoUniversity.Controllers
         private void PopulateAssignedCourseData(Instructor instructor)
         {
             var allCourses = db.Courses;
-            var instructorCourses = new HashSet<int>(instructor.Courses.Select(c => c.CourseID));
+            var instructorCourses = new HashSet<int>(instructor.Courses.Select(c => c.CourseId));
             var viewModel = allCourses.Select(course => new AssignedCourseData
             {
-                CourseID = course.CourseID, Title = course.Title, Assigned = instructorCourses.Contains(course.CourseID)
+                CourseID = course.CourseId, Title = course.Title, Assigned = instructorCourses.Contains(course.CourseId)
             }).ToList();
 
             ViewBag.Courses = viewModel;
@@ -142,7 +142,7 @@ namespace ContosoUniversity.Controllers
             }
             var instructorToUpdate = db.Instructors
                 .Include(i => i.OfficeAssignment)
-                .Include(i => i.Courses).Single(i => i.ID == id);
+                .Include(i => i.Courses).Single(i => i.Id == id);
 
             if (TryUpdateModel(instructorToUpdate, "",
                new[] { "LastName", "FirstMidName", "HireDate", "OfficeAssignment" }))
@@ -179,19 +179,19 @@ namespace ContosoUniversity.Controllers
 
             var selectedCoursesHs = new HashSet<string>(selectedCourses);
             var instructorCourses = new HashSet<int>
-                (instructorToUpdate.Courses.Select(c => c.CourseID));
+                (instructorToUpdate.Courses.Select(c => c.CourseId));
             foreach (var course in db.Courses)
             {
-                if (selectedCoursesHs.Contains(course.CourseID.ToString()))
+                if (selectedCoursesHs.Contains(course.CourseId.ToString()))
                 {
-                    if (!instructorCourses.Contains(course.CourseID))
+                    if (!instructorCourses.Contains(course.CourseId))
                     {
                         instructorToUpdate.Courses.Add(course);
                     }
                 }
                 else
                 {
-                    if (instructorCourses.Contains(course.CourseID))
+                    if (instructorCourses.Contains(course.CourseId))
                     {
                         instructorToUpdate.Courses.Remove(course);
                     }
@@ -222,16 +222,16 @@ namespace ContosoUniversity.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             var instructor = db.Instructors
-                .Include(i => i.OfficeAssignment).Single(i => i.ID == id);
+                .Include(i => i.OfficeAssignment).Single(i => i.Id == id);
 
             instructor.OfficeAssignment = null;
             db.Instructors.Remove(instructor);
 
-            var department = db.Departments.SingleOrDefault(d => d.InstructorID == id);
+            var department = db.Departments.SingleOrDefault(d => d.InstructorId == id);
 
             if (department != null)
             {
-                department.InstructorID = null;
+                department.InstructorId = null;
             }
 
             db.SaveChanges();

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Entities
+namespace DataLayer.Data.Entities
 {
     public abstract class Person
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]

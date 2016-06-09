@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
-using DataLayer.Entities;
+using DataLayer.Data.Entities;
 
-namespace DataLayer
+namespace DataLayer.Data
 {
     public class SchoolContext : DbContext, IDataContext
     {

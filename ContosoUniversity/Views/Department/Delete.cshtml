@@ -1,4 +1,4 @@
-﻿@model DataLayer.Entities.Department
+﻿@model DataLayer.Data.Entities.Department
 
 @{
     ViewBag.Title = "Delete";
@@ -50,7 +50,7 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.DepartmentID)
+        @Html.HiddenFor(model => model.DepartmentId)
         @Html.HiddenFor(model => model.RowVersion)
 
         <div class="form-actions no-color">
