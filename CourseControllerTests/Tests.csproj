@@ -99,6 +99,10 @@
       <Project>{264E21D6-4024-4A53-B1BE-1CD42F3348FE}</Project>
       <Name>ContosoUniversity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{e5ec939a-ac19-4463-9b93-72a6aef9b210}</Project>
+      <Name>DataLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ContosoUniversity</RootNamespace>
     <AssemblyName>ContosoUniversity</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <ApplicationInsightsResourceId>/subscriptions/aeb4ae60-b7cb-4f3d-966d-fa43b6607f30/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/ContosoUniversity</ApplicationInsightsResourceId>
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,17 +73,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -124,6 +123,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Unity.Mvc3, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.Mvc3.1.2\lib\net40\Unity.Mvc3.dll</HintPath>
       <Private>True</Private>
@@ -156,51 +156,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstructorController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
-    <Compile Include="DAL\FakeDBSet.cs" />
-    <Compile Include="DAL\FakeSchoolContext.cs" />
-    <Compile Include="DAL\IDataContext.cs" />
-    <Compile Include="DAL\SchoolConfiguration.cs" />
-    <Compile Include="DAL\SchoolContext.cs" />
-    <Compile Include="DAL\SchoolInitializer.cs" />
-    <Compile Include="DAL\SchoolInterceptorLogging.cs" />
-    <Compile Include="DAL\SchoolInterceptorTransientErrors.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Migrations\201411021828194_InitialCreate.cs" />
-    <Compile Include="Migrations\201411021828194_InitialCreate.Designer.cs">
-      <DependentUpon>201411021828194_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411021834484_MaxLengthOnNames.cs" />
-    <Compile Include="Migrations\201411021834484_MaxLengthOnNames.Designer.cs">
-      <DependentUpon>201411021834484_MaxLengthOnNames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411021841373_ComplexDataModel.cs" />
-    <Compile Include="Migrations\201411021841373_ComplexDataModel.Designer.cs">
-      <DependentUpon>201411021841373_ComplexDataModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411021957458_DepartmentSP.cs" />
-    <Compile Include="Migrations\201411021957458_DepartmentSP.Designer.cs">
-      <DependentUpon>201411021957458_DepartmentSP.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411022009135_RowVersion.cs" />
-    <Compile Include="Migrations\201411022009135_RowVersion.Designer.cs">
-      <DependentUpon>201411022009135_RowVersion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411022351064_Inheritance.cs" />
-    <Compile Include="Migrations\201411022351064_Inheritance.Designer.cs">
-      <DependentUpon>201411022351064_Inheritance.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Course.cs" />
-    <Compile Include="Models\Department.cs" />
-    <Compile Include="Models\Enrollment.cs" />
-    <Compile Include="Models\Instructor.cs" />
-    <Compile Include="Models\OfficeAssignment.cs" />
-    <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AssignedCourseData.cs" />
     <Compile Include="ViewModels\EnrollmentDateGroup.cs" />
@@ -268,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -277,24 +236,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201411021828194_InitialCreate.resx">
-      <DependentUpon>201411021828194_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411021834484_MaxLengthOnNames.resx">
-      <DependentUpon>201411021834484_MaxLengthOnNames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411021841373_ComplexDataModel.resx">
-      <DependentUpon>201411021841373_ComplexDataModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411021957458_DepartmentSP.resx">
-      <DependentUpon>201411021957458_DepartmentSP.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411022009135_RowVersion.resx">
-      <DependentUpon>201411022009135_RowVersion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411022351064_Inheritance.resx">
-      <DependentUpon>201411022351064_Inheritance.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{e5ec939a-ac19-4463-9b93-72a6aef9b210}</Project>
+      <Name>DataLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

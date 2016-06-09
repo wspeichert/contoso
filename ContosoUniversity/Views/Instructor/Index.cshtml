@@ -21,7 +21,7 @@
 
     @foreach (var item in Model.Instructors)
     {
-        string selectedRow = "";
+        var selectedRow = "";
         if (item.ID == ViewBag.InstructorID)
         {
             selectedRow = "success";
@@ -75,7 +75,7 @@
 
         @foreach (var item in Model.Courses)
         {
-            string selectedRow = "";
+            var selectedRow = "";
             if (item.CourseID == ViewBag.CourseID)
             {
                 selectedRow = "success";

@@ -6,11 +6,12 @@ using System.Net;
 using System.Web.Mvc;
 using ContosoUniversity.Controllers;
 using ContosoUniversity.DAL;
-using ContosoUniversity.Models;
+using DataLayer;
+using DataLayer.Entities;
 using FakeItEasy;
 using NUnit.Framework;
 
-namespace CourseControllerTests
+namespace CourseControllerTests.Controllers
 {
     public static class CourseControllerTests
     {

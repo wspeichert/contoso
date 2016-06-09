@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ContosoUniversity.DAL;
-using ContosoUniversity.Models;
 using System.Data.Entity.Infrastructure;
+using DataLayer;
+using DataLayer.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -41,7 +39,7 @@ namespace ContosoUniversity.Controllers
             }
 
             // Commenting out original code to show how to use a raw SQL query.
-            Department department = db.Departments.Find(id);
+            var department = db.Departments.Find(id);
 
             // Create and execute raw SQL query.
             //string query = "SELECT * FROM Department WHERE DepartmentID = @p0";
@@ -86,7 +84,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db.Departments.Find(id);
+            var department = db.Departments.Find(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -102,7 +100,7 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int? id, byte[] rowVersion)
         {
-            string[] fieldsToBind = new string[] { "Name", "Budget", "StartDate", "InstructorID", "RowVersion" };
+            var fieldsToBind = new[] { "Name", "Budget", "StartDate", "InstructorID", "RowVersion" };
 
             if (id == null)
             {
@@ -112,7 +110,7 @@ namespace ContosoUniversity.Controllers
             var departmentToUpdate = db.Departments.Find(id);
             if (departmentToUpdate == null)
             {
-                Department deletedDepartment = new Department();
+                var deletedDepartment = new Department();
                 TryUpdateModel(deletedDepartment, fieldsToBind);
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
@@ -181,7 +179,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = db.Departments.Find(id);
+            var department = db.Departments.Find(id);
             if (department == null)
             {
                 if (concurrencyError.GetValueOrDefault())

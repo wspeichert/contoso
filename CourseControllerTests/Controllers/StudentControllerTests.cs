@@ -1,6 +1,7 @@
 ﻿using ContosoUniversity.Controllers;
 using ContosoUniversity.DAL;
-using ContosoUniversity.Models;
+using DataLayer;
+using DataLayer.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;

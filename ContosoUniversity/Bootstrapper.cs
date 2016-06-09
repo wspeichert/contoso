@@ -1,7 +1,7 @@
 using System.Web.Mvc;
+using DataLayer;
 using Microsoft.Practices.Unity;
 using Unity.Mvc3;
-using ContosoUniversity.DAL;
 
 namespace ContosoUniversity
 {

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using ContosoUniversity.DAL;
-using ContosoUniversity.Models;
 using System.Data.Entity.Infrastructure;
+using DataLayer;
+using DataLayer.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -23,17 +20,17 @@ namespace ContosoUniversity.Controllers
         #endregion
 
         // GET: Course
-        public ActionResult Index(int? SelectedDepartment)
+        public ActionResult Index(int? selectedDepartment)
         {
             var departments = db.Departments.OrderBy(q => q.Name).ToList();
-            ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", SelectedDepartment);
-            int departmentID = SelectedDepartment.GetValueOrDefault();
+            ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", selectedDepartment);
+            var departmentId = selectedDepartment.GetValueOrDefault();
 
-            IQueryable<Course> courses = db.Courses
-                .Where(c => !SelectedDepartment.HasValue || c.DepartmentID == departmentID)
+            var courses = db.Courses
+                .Where(c => !selectedDepartment.HasValue || c.DepartmentID == departmentId)
                 .OrderBy(d => d.CourseID)
                 .Include(d => d.Department);
-            var sql = courses.ToString();
+
             return View(courses.ToList());
         }
 
@@ -44,7 +41,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            var course = db.Courses.Find(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -87,7 +84,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            var course = db.Courses.Find(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -106,7 +103,7 @@ namespace ContosoUniversity.Controllers
             }
             var courseToUpdate = db.Courses.Find(id);
             if (TryUpdateModel(courseToUpdate, "",
-               new string[] { "Title", "Credits", "DepartmentID" }))
+               new[] { "Title", "Credits", "DepartmentID" }))
             {
                 try
                 {
@@ -140,7 +137,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            var course = db.Courses.Find(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -153,7 +150,7 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Courses.Find(id);
+            var course = db.Courses.Find(id);
             db.Courses.Remove(course);
             db.SaveChanges();
             return RedirectToAction("Index");

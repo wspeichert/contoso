@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ContosoUniversity.DAL;
 using ContosoUniversity.ViewModels;
+using DataLayer;
 
 
 namespace ContosoUniversity.Controllers
@@ -37,10 +35,10 @@ namespace ContosoUniversity.Controllers
             //           };
 
             // SQL version of the above LINQ code.
-            string query = "SELECT EnrollmentDate, COUNT(*) AS StudentCount "
-                + "FROM Person "
-                + "WHERE Discriminator = 'Student' "
-                + "GROUP BY EnrollmentDate";
+            const string query = "SELECT EnrollmentDate, COUNT(*) AS StudentCount "
+                                 + "FROM Person "
+                                 + "WHERE Discriminator = 'Student' "
+                                 + "GROUP BY EnrollmentDate";
             IEnumerable<EnrollmentDateGroup> data = db.Database.SqlQuery<EnrollmentDateGroup>(query);
 
             return View(data.ToList());
