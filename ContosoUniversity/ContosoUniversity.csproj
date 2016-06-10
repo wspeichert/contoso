@@ -159,6 +159,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\InstructorViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AssignedCourseData.cs" />
     <Compile Include="ViewModels\EnrollmentDateGroup.cs" />
@@ -226,7 +227,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -236,9 +236,17 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+    <ProjectReference Include="..\Backend.Students\StudentsData.csproj">
+      <Project>{3afa1bad-c0bc-4aaa-aa97-3e721877476f}</Project>
+      <Name>StudentsData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataLayer\SchoolData.csproj">
       <Project>{e5ec939a-ac19-4463-9b93-72a6aef9b210}</Project>
-      <Name>DataLayer</Name>
+      <Name>SchoolData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITOps.Shared\ITOps.Shared.csproj">
+      <Project>{c8c2d8e7-932e-4453-bd2b-7557df98c649}</Project>
+      <Name>ITOps.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

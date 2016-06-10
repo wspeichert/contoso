@@ -1,7 +1,7 @@
 using System.Web.Mvc;
-using DataLayer;
-using DataLayer.Data;
 using Microsoft.Practices.Unity;
+using SchoolData.Data;
+using StudentsData.Data;
 using Unity.Mvc3;
 
 namespace ContosoUniversity
@@ -23,7 +23,8 @@ namespace ContosoUniversity
             // it is NOT necessary to register your controllers
 
             // e.g. container.RegisterType<ITestService, TestService>();            
-            container.RegisterType<IDataContext, SchoolContext>();
+            container.RegisterType<SchoolData.Data.IDataContext, SchoolContext>();
+            container.RegisterType<StudentsData.Data.IDataContext, StudentsContext>();
             return container;
         }
     }

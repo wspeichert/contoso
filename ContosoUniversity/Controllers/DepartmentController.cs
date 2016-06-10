@@ -7,7 +7,8 @@ using System.Net;
 using System.Web.Mvc;
 using System.Data.Entity.Infrastructure;
 using DataLayer.Data;
-using DataLayer.Data.Entities;
+using SchoolData.Data;
+using SchoolData.Data.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -26,7 +27,7 @@ namespace ContosoUniversity.Controllers
         // GET: Department
         public async Task<ActionResult> Index()
         {
-            var departments = db.Departments.Include(d => d.Administrator);
+            var departments = db.Departments;
             return View(await departments.ToListAsync());
         }
 
@@ -73,7 +74,7 @@ namespace ContosoUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorId);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.AdministratorInstructorId);
             return View(department);
         }
 
@@ -89,7 +90,7 @@ namespace ContosoUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorId);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.AdministratorInstructorId);
             return View(department);
         }
 
@@ -114,7 +115,7 @@ namespace ContosoUniversity.Controllers
                 TryUpdateModel(deletedDepartment, fieldsToBind);
                 ModelState.AddModelError(string.Empty,
                     "Unable to save changes. The department was deleted by another user.");
-                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", deletedDepartment.InstructorId);
+                ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", deletedDepartment.AdministratorInstructorId);
                 return View(deletedDepartment);
             }
 
@@ -151,9 +152,9 @@ namespace ContosoUniversity.Controllers
                         if (databaseValues.StartDate != clientValues.StartDate)
                             ModelState.AddModelError("StartDate", "Current value: "
                                 + String.Format("{0:d}", databaseValues.StartDate));
-                        if (databaseValues.InstructorId != clientValues.InstructorId)
+                        if (databaseValues.AdministratorInstructorId != clientValues.AdministratorInstructorId)
                             ModelState.AddModelError("InstructorID", "Current value: "
-                                + db.Instructors.Find(databaseValues.InstructorId).FullName);
+                                + db.Instructors.Find(databaseValues.AdministratorInstructorId).FullName);
                         ModelState.AddModelError(string.Empty, "The record you attempted to edit "
                             + "was modified by another user after you got the original value. The "
                             + "edit operation was canceled and the current values in the database "
@@ -168,7 +169,7 @@ namespace ContosoUniversity.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", departmentToUpdate.InstructorId);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", departmentToUpdate.AdministratorInstructorId);
             return View(departmentToUpdate);
         }
 

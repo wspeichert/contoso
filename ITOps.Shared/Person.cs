@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Data.Entities
+namespace ITOps.Shared
 {
     public abstract class Person
     {

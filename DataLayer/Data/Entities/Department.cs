@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Data.Entities
+namespace SchoolData.Data.Entities
 {
     public class Department
     {
@@ -21,12 +20,9 @@ namespace DataLayer.Data.Entities
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
 
-        public int? InstructorId { get; set; }
+        public int? AdministratorInstructorId { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
-
-        public virtual Instructor Administrator { get; set; }
-        public virtual ICollection<Course> Courses { get; set; }
     }
 }

@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using DataLayer.Data;
-using DataLayer.Data.Entities;
-using PagedList;
+using Backend.Students.Data;
+using Backend.Students.Data.Entities;
 using System.Data.Entity.Infrastructure;
+using PagedList;
+using StudentsData.Data;
+using StudentsData.Data.Entities;
 
 namespace ContosoUniversity.Controllers
 {

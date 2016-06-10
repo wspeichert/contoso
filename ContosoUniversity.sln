@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContosoUniversity", "ContosoUniversity\ContosoUniversity.csproj", "{264E21D6-4024-4A53-B1BE-1CD42F3348FE}"
 EndProject
@@ -9,7 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BA3246
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "CourseControllerTests\Tests.csproj", "{C9E4ED1E-D6D6-4834-9FEF-0FA47D0A69C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{E5EC939A-AC19-4463-9B93-72A6AEF9B210}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolData", "DataLayer\SchoolData.csproj", "{E5EC939A-AC19-4463-9B93-72A6AEF9B210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsData", "Backend.Students\StudentsData.csproj", "{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITOps.Shared", "ITOps.Shared\ITOps.Shared.csproj", "{C8C2D8E7-932E-4453-BD2B-7557DF98C649}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{17977BDE-501A-4651-9D8F-0B6786C9DF98}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "School", "School", "{7A75B10D-C6F6-475C-AB67-144F83E91163}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Students", "Students", "{1655A8A4-7121-4834-B155-E54DCF60134C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +39,23 @@ Global
 		{E5EC939A-AC19-4463-9B93-72A6AEF9B210}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5EC939A-AC19-4463-9B93-72A6AEF9B210}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5EC939A-AC19-4463-9B93-72A6AEF9B210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C2D8E7-932E-4453-BD2B-7557DF98C649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C2D8E7-932E-4453-BD2B-7557DF98C649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C2D8E7-932E-4453-BD2B-7557DF98C649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C2D8E7-932E-4453-BD2B-7557DF98C649}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A75B10D-C6F6-475C-AB67-144F83E91163} = {17977BDE-501A-4651-9D8F-0B6786C9DF98}
+		{1655A8A4-7121-4834-B155-E54DCF60134C} = {17977BDE-501A-4651-9D8F-0B6786C9DF98}
+		{E5EC939A-AC19-4463-9B93-72A6AEF9B210} = {7A75B10D-C6F6-475C-AB67-144F83E91163}
+		{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F} = {1655A8A4-7121-4834-B155-E54DCF60134C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35

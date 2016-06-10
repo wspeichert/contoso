@@ -1,11 +1,14 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
-using DataLayer.Data;
-using DataLayer.Data.Entities;
+using Backend.Students.Data.Entities;
+using ITOps.Shared;
+using SchoolData.Data;
+using SchoolData.Data.Entities;
+using StudentsData.Data.Entities;
 
 namespace CourseControllerTests.Infrastructure.Fakes
 {
-    public class FakeSchoolContext : IDataContext
+    public class FakeSchoolContext : IDataContext, StudentsData.Data.IDataContext
     {
         public FakeSchoolContext()
         {
@@ -24,6 +27,8 @@ namespace CourseControllerTests.Infrastructure.Fakes
         public IDbSet<Student> Students { get; set; }
         public IDbSet<OfficeAssignment> OfficeAssignments { get; set; }
         public IDbSet<Person> People { get; set; }
+        public IDbSet<InstructorCourse> InstructorCourses { get; set; }
+
         public int SaveChanges()
         {
             SaveChangesWasCalled = true;

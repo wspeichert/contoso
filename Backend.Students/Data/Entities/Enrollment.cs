@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using StudentsData.Data.Entities;
 
-namespace DataLayer.Data.Entities
+namespace Backend.Students.Data.Entities
 {
     public enum Grade
     {
@@ -15,7 +16,6 @@ namespace DataLayer.Data.Entities
         [DisplayFormat(NullDisplayText = "No grade")]
         public Grade? Grade { get; set; }
 
-        public virtual Course Course { get; set; }
         public virtual Student Student { get; set; }
     }
 }

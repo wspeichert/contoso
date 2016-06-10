@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Data.Entities
+namespace SchoolData.Data.Entities
 {
     public class Course
     {
@@ -18,8 +17,6 @@ namespace DataLayer.Data.Entities
 
         public int DepartmentId { get; set; }
 
-        public virtual Department Department { get; set; }
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual ICollection<Instructor> Instructors { get; set; }
+        public int InstructorId { get; set; }
     }
 }

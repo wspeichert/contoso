@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Backend.Students.Data.Entities;
+using ITOps.Shared;
 
-namespace DataLayer.Data.Entities
+namespace StudentsData.Data.Entities
 {
     public class Student : Person
     {

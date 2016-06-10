@@ -1,11 +1,11 @@
-﻿using ContosoUniversity.Controllers;
+﻿using Backend.Students.Data.Entities;
+using ContosoUniversity.Controllers;
 using CourseControllerTests.Infrastructure.Fakes;
-using DataLayer;
-using DataLayer.Data.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using StudentsData.Data.Entities;
 
 namespace CourseControllerTests.Controllers
 {

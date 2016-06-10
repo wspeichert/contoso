@@ -1,4 +1,4 @@
-﻿@model DataLayer.Data.Entities.Instructor
+﻿@model ContosoUniversity.Models.InstructorViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -15,29 +15,29 @@
         <h4>Instructor</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Instructor.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Instructor.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Instructor.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Instructor.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Instructor.FirstMidName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Instructor.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Instructor.FirstMidName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.HireDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Instructor.HireDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.HireDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.HireDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Instructor.HireDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Instructor.HireDate, "", new { @class = "text-danger" })
             </div>
         </div>
 

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ITOps.Shared;
 
-namespace DataLayer.Data.Entities
+namespace SchoolData.Data.Entities
 {
     public class Instructor : Person
     {
@@ -10,8 +10,5 @@ namespace DataLayer.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Hire Date")]
         public DateTime HireDate { get; set; }
-
-        public virtual ICollection<Course> Courses { get; set; }
-        public virtual OfficeAssignment OfficeAssignment { get; set; }
     }
 }

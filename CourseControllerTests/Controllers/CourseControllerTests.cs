@@ -8,9 +8,10 @@ using ContosoUniversity.Controllers;
 using CourseControllerTests.Infrastructure.Fakes;
 using DataLayer;
 using DataLayer.Data;
-using DataLayer.Data.Entities;
 using FakeItEasy;
 using NUnit.Framework;
+using SchoolData.Data;
+using SchoolData.Data.Entities;
 
 namespace CourseControllerTests.Controllers
 {

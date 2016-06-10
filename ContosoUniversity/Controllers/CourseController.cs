@@ -1,10 +1,9 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Data.Entity.Infrastructure;
-using DataLayer.Data;
-using DataLayer.Data.Entities;
+using SchoolData.Data;
+using SchoolData.Data.Entities;
 
 namespace ContosoUniversity.Controllers
 {
@@ -12,24 +11,24 @@ namespace ContosoUniversity.Controllers
     {
         #region DiConstructors        
         //Using Unity IoC to inject data context at runtime!
-        private readonly IDataContext db;
-        public CourseController(IDataContext db)
+        private readonly IDataContext schoolContext;
+        public CourseController(IDataContext schoolContext)
         {
-            this.db = db;
+            this.schoolContext = schoolContext;
         }
         #endregion
 
         // GET: Course
         public ActionResult Index(int? selectedDepartment)
         {
-            var departments = db.Departments.OrderBy(q => q.Name).ToList();
+            var departments = schoolContext.Departments.OrderBy(q => q.Name).ToList();
+
             ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", selectedDepartment);
             var departmentId = selectedDepartment.GetValueOrDefault();
 
-            var courses = db.Courses
+            var courses = schoolContext.Courses
                 .Where(c => !selectedDepartment.HasValue || c.DepartmentId == departmentId)
-                .OrderBy(d => d.CourseId)
-                .Include(d => d.Department);
+                .OrderBy(d => d.CourseId);
 
             return View(courses.ToList());
         }
@@ -41,7 +40,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = db.Courses.Find(id);
+            var course = schoolContext.Courses.Find(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -64,8 +63,8 @@ namespace ContosoUniversity.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Courses.Add(course);
-                    db.SaveChanges();
+                    schoolContext.Courses.Add(course);
+                    schoolContext.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
@@ -84,7 +83,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = db.Courses.Find(id);
+            var course = schoolContext.Courses.Find(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -101,13 +100,13 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var courseToUpdate = db.Courses.Find(id);
+            var courseToUpdate = schoolContext.Courses.Find(id);
             if (TryUpdateModel(courseToUpdate, "",
                new[] { "Title", "Credits", "DepartmentID" }))
             {
                 try
                 {
-                    db.SaveChanges();
+                    schoolContext.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
@@ -123,7 +122,7 @@ namespace ContosoUniversity.Controllers
 
         private void PopulateDepartmentsDropDownList(object selectedDepartment = null)
         {
-            var departmentsQuery = from d in db.Departments
+            var departmentsQuery = from d in schoolContext.Departments
                                    orderby d.Name
                                    select d;
             ViewBag.DepartmentID = new SelectList(departmentsQuery, "DepartmentID", "Name", selectedDepartment);
@@ -137,7 +136,7 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var course = db.Courses.Find(id);
+            var course = schoolContext.Courses.Find(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -150,9 +149,9 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var course = db.Courses.Find(id);
-            db.Courses.Remove(course);
-            db.SaveChanges();
+            var course = schoolContext.Courses.Find(id);
+            schoolContext.Courses.Remove(course);
+            schoolContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -166,7 +165,7 @@ namespace ContosoUniversity.Controllers
         {
             if (multiplier != null)
             {
-                ViewBag.RowsAffected = db.Database.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
+                ViewBag.RowsAffected = schoolContext.Database.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
             }
             return View();
         }
@@ -175,7 +174,7 @@ namespace ContosoUniversity.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                schoolContext.Dispose();
             }
             base.Dispose(disposing);
         }
