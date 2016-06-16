@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DataLayer.Data.Entities.Department>
+﻿@model IEnumerable<ContosoUniversity.ViewModels.DepartmentData>
 @{
     ViewBag.Title = "Departments";
 }
@@ -9,13 +9,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Department.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Budget)
+            @Html.DisplayNameFor(model => model.Department.Budget)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.Department.StartDate)
         </th>
         <th>
             Administrator
@@ -26,21 +26,21 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Department.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Budget)
+                @Html.DisplayFor(modelItem => item.Department.Budget)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Html.DisplayFor(modelItem => item.Department.StartDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Administrator.FullName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.DepartmentId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.DepartmentId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.DepartmentId })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Department.DepartmentId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Department.DepartmentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Department.DepartmentId })
             </td>
         </tr>
     }

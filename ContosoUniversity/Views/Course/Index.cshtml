@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SchoolData.Data.Entities.Course>
+﻿@model IEnumerable<ContosoUniversity.ViewModels.CourseData>
 
 @{
     ViewBag.Title = "Courses";
@@ -21,13 +21,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CourseId)
+            @Html.DisplayNameFor(model => model.Course.CourseId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Course.Title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Credits)
+            @Html.DisplayNameFor(model => model.Course.Credits)
         </th>
         <th>
             Department
@@ -39,21 +39,21 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CourseId)
+                @Html.DisplayFor(modelItem => item.Course.CourseId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Course.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Credits)
+                @Html.DisplayFor(modelItem => item.Course.Credits)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Department.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.CourseId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.CourseId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.CourseId })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Course.CourseId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Course.CourseId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Course.CourseId })
             </td>
         </tr>
     }

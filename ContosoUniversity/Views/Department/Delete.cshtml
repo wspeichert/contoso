@@ -1,4 +1,4 @@
-﻿@model DataLayer.Data.Entities.Department
+﻿@model ContosoUniversity.ViewModels.DepartmentData
 
 @{
     ViewBag.Title = "Delete";
@@ -22,27 +22,27 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Department.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Department.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Budget)
+            @Html.DisplayNameFor(model => model.Department.Budget)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Budget)
+            @Html.DisplayFor(model => model.Department.Budget)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.Department.StartDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.StartDate)
+            @Html.DisplayFor(model => model.Department.StartDate)
         </dd>
 
     </dl>
@@ -50,8 +50,8 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.DepartmentId)
-        @Html.HiddenFor(model => model.RowVersion)
+        @Html.HiddenFor(model => model.Department.DepartmentId)
+        @Html.HiddenFor(model => model.Department.RowVersion)
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
 using System.Data.Entity.Infrastructure;
+using ContosoUniversity.ViewModels;
 using DataLayer.Data;
 using SchoolData.Data;
 using SchoolData.Data.Entities;
@@ -27,7 +28,11 @@ namespace ContosoUniversity.Controllers
         // GET: Department
         public async Task<ActionResult> Index()
         {
-            var departments = db.Departments;
+            var departments = db.Departments
+                .GroupJoin(db.Instructors, dept => dept.AdministratorInstructorId, ins => ins.Id,
+                    (dept, ins) => new {dept, ins})
+                .SelectMany(x => x.ins.DefaultIfEmpty(),
+                    (x, ins) => new DepartmentData {Department = x.dept, Administrator = ins});
             return View(await departments.ToListAsync());
         }
 
@@ -50,7 +55,8 @@ namespace ContosoUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            return View(department);
+            var admin = db.Instructors.Find(department.AdministratorInstructorId);
+            return View(new DepartmentData{Department = department, Administrator = admin});
         }
 
         // GET: Department/Create
@@ -200,14 +206,16 @@ namespace ContosoUniversity.Controllers
                     + "click the Back to List hyperlink.";
             }
 
-            return View(department);
+            var admin = db.Instructors.Find(department.AdministratorInstructorId);
+            return View(new DepartmentData { Department = department, Administrator = admin });
         }
 
         // POST: Department/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(Department department)
+        public async Task<ActionResult> Delete(DepartmentData model)
         {
+            var department = model.Department;
             try
             {
                 var departmentToDelete = db.Departments.SingleOrDefault(x => x.DepartmentId == department.DepartmentId);
@@ -223,7 +231,7 @@ namespace ContosoUniversity.Controllers
             {
                 //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
                 ModelState.AddModelError(string.Empty, "Unable to delete. Try again, and if the problem persists contact your system administrator.");
-                return View(department);
+                return View(model);
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.Mvc;
 using System.Data.Entity.Infrastructure;
+using ContosoUniversity.ViewModels;
 using SchoolData.Data;
 using SchoolData.Data.Entities;
 
@@ -28,7 +29,15 @@ namespace ContosoUniversity.Controllers
 
             var courses = schoolContext.Courses
                 .Where(c => !selectedDepartment.HasValue || c.DepartmentId == departmentId)
-                .OrderBy(d => d.CourseId);
+                .GroupJoin(schoolContext.Departments, course => course.DepartmentId, dept => dept.DepartmentId, (course,dept) => new {course,dept})
+                .SelectMany(x => x.dept.DefaultIfEmpty(), (x,dept) => new {x.course,dept})
+                .ToList()
+                .Select(x => new CourseData
+                {
+                    Course = x.course,
+                    Department = x.dept
+                })
+                .OrderBy(d => d.Course.CourseId);
 
             return View(courses.ToList());
         }
@@ -45,7 +54,8 @@ namespace ContosoUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            return View(course);
+            var department = schoolContext.Departments.Find(course.DepartmentId);
+            return View(new CourseData{Course = course, Department = department});
         }
 
 
@@ -141,7 +151,8 @@ namespace ContosoUniversity.Controllers
             {
                 return HttpNotFound();
             }
-            return View(course);
+            var department = schoolContext.Departments.Find(course.DepartmentId);
+            return View(new CourseData{Course = course, Department = department});
         }
 
         // POST: Course/Delete/5

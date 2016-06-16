@@ -1,4 +1,4 @@
-﻿@model DataLayer.Data.Entities.Course
+﻿@model ContosoUniversity.ViewModels.CourseData
 
 @{
     ViewBag.Title = "Delete";
@@ -20,27 +20,27 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CourseId)
+            @Html.DisplayNameFor(model => model.Course.CourseId)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CourseId)
+            @Html.DisplayFor(model => model.Course.CourseId)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Course.Title)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Course.Title)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Credits)
+            @Html.DisplayNameFor(model => model.Course.Credits)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Credits)
+            @Html.DisplayFor(model => model.Course.Credits)
         </dd>
 
     </dl>
