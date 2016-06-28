@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BA3246
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "CourseControllerTests\Tests.csproj", "{C9E4ED1E-D6D6-4834-9FEF-0FA47D0A69C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolData", "DataLayer\SchoolData.csproj", "{E5EC939A-AC19-4463-9B93-72A6AEF9B210}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolData", "Services\School\SchoolData.csproj", "{E5EC939A-AC19-4463-9B93-72A6AEF9B210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsData", "Backend.Students\StudentsData.csproj", "{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsData", "Services\Students\StudentsData.csproj", "{3AFA1BAD-C0BC-4AAA-AA97-3E721877476F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITOps.Shared", "ITOps.Shared\ITOps.Shared.csproj", "{C8C2D8E7-932E-4453-BD2B-7557DF98C649}"
 EndProject

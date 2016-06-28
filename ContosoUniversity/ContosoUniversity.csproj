@@ -238,11 +238,11 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Backend.Students\StudentsData.csproj">
+    <ProjectReference Include="..\Services\Students\StudentsData.csproj">
       <Project>{3afa1bad-c0bc-4aaa-aa97-3e721877476f}</Project>
       <Name>StudentsData</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataLayer\SchoolData.csproj">
+    <ProjectReference Include="..\Services\School\SchoolData.csproj">
       <Project>{e5ec939a-ac19-4463-9b93-72a6aef9b210}</Project>
       <Name>SchoolData</Name>
     </ProjectReference>

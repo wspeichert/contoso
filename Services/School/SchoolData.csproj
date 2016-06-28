@@ -70,7 +70,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITOps.Shared\ITOps.Shared.csproj">
+    <ProjectReference Include="..\..\ITOps.Shared\ITOps.Shared.csproj">
       <Project>{c8c2d8e7-932e-4453-bd2b-7557df98c649}</Project>
       <Name>ITOps.Shared</Name>
     </ProjectReference>
