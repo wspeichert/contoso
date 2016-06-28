@@ -28,16 +28,27 @@ namespace ContosoUniversity.Controllers
         // GET: Instructor
         public ActionResult Index(int? id, int? courseId)
         {
-            var viewModel = new InstructorIndexData
-            {
-                Instructors = schoolContext.Instructors
-                    .OrderBy(i => i.LastName)
-            };
+            var viewModel = new InstructorViewModel();
 
+            var instructors = schoolContext.Instructors.OrderBy(x => x.LastName).ToList();
+            var instructorCourses = schoolContext.InstructorCourses.ToList();
+            var courses = schoolContext.Courses.ToList();
+            var departments = schoolContext.Departments.ToList();
+
+            var instructorData = instructors
+                .GroupJoin(instructorCourses, ins => ins.Id, ic => ic.InstructorId, (ins, ic) => new {ins, ic})
+                .SelectMany(x => x.ic.DefaultIfEmpty(),(x,ic) => new {x.ins, ic})
+                .GroupJoin(courses, x=>x.ic.CourseId,c=>c.CourseId,(x,c) => new {x.ins, x.ic, c})
+                //.SelectMany(x => x.c.DefaultIfEmpty(), (x,c) => new {x.ins, x.ic, c})
+                .Select(x => new InstructorData{Instructor = x.ins, Courses = x.c});
+
+            viewModel.Instructors = instructorData;
             if (id != null)
             {
                 ViewBag.InstructorID = id.Value;
-                viewModel.Courses = schoolContext.Courses.Where(x => x.InstructorId == id);
+                viewModel.Courses = instructorData
+                    .Single(x => x.Instructor.Id == id).Courses
+                    .Select(x => new CourseData{Course = x,Department = departments.Single(d => d.DepartmentId == x.DepartmentId)}).ToList();
             }
 
             if (courseId == null) return View(viewModel);
@@ -47,9 +58,9 @@ namespace ContosoUniversity.Controllers
             //viewModel.Enrollments = viewModel.Courses.Where(
             //    x => x.CourseID == courseID).Single().Enrollments;
             // Explicit loading
-            var selectedCourse = viewModel.Courses.Single(x => x.CourseId == courseId);
+            var selectedCourse = viewModel.Courses.Single(x => x.Course.CourseId == courseId);
 
-            viewModel.Enrollments = studentsContext.Enrollments.Where(x => x.CourseId == selectedCourse.CourseId);
+            viewModel.Enrollments = studentsContext.Enrollments.Where(x => x.CourseId == selectedCourse.Course.CourseId);
 
             return View(viewModel);
         }
@@ -72,14 +83,14 @@ namespace ContosoUniversity.Controllers
 
         public ActionResult Create()
         {
-            var model = new InstructorViewModel {Courses = new List<Course>()};
+            var model = new InstructorData {Instructor = new Instructor(), Courses = new List<Course>()};
             PopulateAssignedCourseData(model);
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(InstructorViewModel model)
+        public ActionResult Create(InstructorData model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -104,17 +115,18 @@ namespace ContosoUniversity.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var instructor = schoolContext.Instructors.Single(i => i.Id == id);
-            var model = new InstructorViewModel {Instructor = instructor};
-
-            PopulateAssignedCourseData(model);
+            var model = new InstructorData {Instructor = instructor};
+            
             if (model.Instructor == null)
             {
                 return HttpNotFound();
             }
+            PopulateAssignedCourseData(model);
+
             return View(model);
         }
 
-        private void PopulateAssignedCourseData(InstructorViewModel model)
+        private void PopulateAssignedCourseData(InstructorData model)
         {
             var allCourses = schoolContext.Courses;
             var instructorCourses = new HashSet<int>(model.Courses.Select(c => c.CourseId));
@@ -130,7 +142,7 @@ namespace ContosoUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(InstructorViewModel model, string[] selectedCourses)
+        public ActionResult Edit(InstructorData model, string[] selectedCourses)
         {
             schoolContext.Instructors.AddOrUpdate(model.Instructor);
             

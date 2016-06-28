@@ -1,4 +1,4 @@
-﻿@model ContosoUniversity.ViewModels.InstructorIndexData
+﻿@model ContosoUniversity.Models.InstructorViewModel
 
 @{
     ViewBag.Title = "Instructors";
@@ -22,19 +22,19 @@
     @foreach (var item in Model.Instructors)
     {
         var selectedRow = "";
-        if (item.Id == ViewBag.InstructorID)
+        if (item.Instructor.Id == ViewBag.InstructorID)
         {
             selectedRow = "success";
         }
         <tr class="@selectedRow">
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.Instructor.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstMidName)
+                @Html.DisplayFor(modelItem => item.Instructor.FirstMidName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HireDate)
+                @Html.DisplayFor(modelItem => item.Instructor.HireDate)
             </td>
             <td>
                 @if (item.OfficeAssignment != null)
@@ -52,10 +52,10 @@
             </td>
 
             <td>
-                @Html.ActionLink("Select", "Index", new { id = item.Id }) |
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Select", "Index", new { id = item.Instructor.Id }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.Instructor.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Instructor.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Instructor.Id })
             </td>
         </tr>
     }
@@ -76,19 +76,19 @@
         @foreach (var item in Model.Courses)
         {
             var selectedRow = "";
-            if (item.CourseId == ViewBag.CourseID)
+            if (item.Course.CourseId == ViewBag.CourseID)
             {
                 selectedRow = "success";
             }
             <tr class="@selectedRow">
                 <td>
-                    @Html.ActionLink("Select", "Index", new { courseID = item.CourseId })
+                    @Html.ActionLink("Select", "Index", new { courseID = item.Course.CourseId })
                 </td>
                 <td>
-                    @item.CourseId
+                    @item.Course.CourseId
                 </td>
                 <td>
-                    @item.Title
+                    @item.Course.Title
                 </td>
                 <td>
                     @item.Department.Name
